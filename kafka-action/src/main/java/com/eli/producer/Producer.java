@@ -1,6 +1,7 @@
-package com.eli.provider;
+package com.eli.producer;
 
 
+import com.alibaba.fastjson.JSON;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
@@ -20,16 +21,16 @@ public class Producer {
         KafkaProducer kafkaProducer = new KafkaProducer<String, String>(kafkaProps);
 
         // 发送消息
-        ProducerRecord<String, String> record = new ProducerRecord<String, String>("topic", "test message1");
+        ProducerRecord<String, String> record = new ProducerRecord<String, String>("topic", "test message1 key", "test message1 value");
 
         // 方式一：直接发送消息，忽略消息发送成功失败异常的结果
 //        kafkaProducer.send(record);
 
         // 方式二：同步发送消息，直到消息发送成功或者抛出异常
-//        kafkaProducer.send(record).get();
+        System.out.println(JSON.toJSONString(kafkaProducer.send(record).get()));
 
         // 方式三：异步发送消息，有消息结果时会回调设置的回调函数
-        kafkaProducer.send(record, new DemoProducerCallback());
+//        kafkaProducer.send(record, new DemoProducerCallback());
 
         Thread.currentThread().sleep(10000);
 
